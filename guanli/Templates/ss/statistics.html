@@ -1,0 +1,114 @@
+{% extends 'ss/base.html' %}
+{% load staticfiles %}
+
+{% block title %} 统计信息 {% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1><strong>高校的信息统计图</strong></h1><br><br>
+    </div>
+    <div id="hello-rank" class="col-md-offset-3" style="width: 1000px;height:400px;"></div><br><br>
+    <br><br>
+    <div id="hi-rank" class="col-md-offset-3 myContainer" style="width: 1000px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var helloChart = echarts.init(document.getElementById('hello-rank'));
+        var hiChart = echarts.init(document.getElementById('hi-rank'));
+
+        // 指定图表的配置项和数据
+     var helloOption = {
+    title : {
+        text: '学校类型饼图',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['综合','工科','农业','医药','师范','体育','艺术','财经','政法','语言']
+    },
+    series : [
+        {
+            name: '学校类型',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:51, name:'综合'},
+                {value:31, name:'工科'},
+                {value:4, name:'农业'},
+                {value:5, name:'医药'},
+                {value:5, name:'师范'},
+                {value:3, name:'体育'},
+                {value:5, name:'艺术'},
+                {value:9, name:'财经'},
+                {value:2, name:'政法'},
+                {value:1, name:'语言'}
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+
+     var  hiOption = {
+         title : {
+        text: '学校性质环形图',
+        x:'center'
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        x: 'left',
+        data:['本科','独立学院','高职专科','其他']
+    },
+    series: [
+        {
+            name:'访问来源',
+            type:'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data:[
+                {value:36, name:'本科'},
+                {value:17, name:'独立学院'},
+                {value:59, name:'高职专科'},
+                {value:4, name:'其他'}
+            ]
+        }
+    ]
+};
+
+        helloChart.setOption(helloOption);
+        hiChart.setOption(hiOption);
+    </script>
+
+{% endblock %}

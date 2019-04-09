@@ -1,0 +1,207 @@
+{% extends "ss/base.html" %}
+{% load staticfiles %}
+{% block title %}查看图书{% endblock %}
+
+
+
+{% block content %}
+
+
+
+    <div class="container myContainer">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-5">
+                    <div class="img-rounded">
+                      <img src="{{ hello.img }}" width="350"
+                                 height="350">
+                    </div>
+                    <br><br><br>
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <h2>学校名称:{{ hello.name }}</h2>
+                    <h2>网站：{{ hello.url }}</h2>
+                    <h2>地址：{{ hello.local }}</h2>
+                    <h2>特色:{{ hello.type }}</h2>
+                    <h2>隶属：{{ hello.subjection }}</h2>
+                    <h2>大学学历：{{ hello.nature }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   <br>
+    <br>
+    <div class="text-center">
+        <h1><strong>图表信息统计</strong></h1><br><br>
+    </div>
+    <div id="reader-rank" class="col-md-offset-3" style="width: 1000px;height:400px;"></div>
+    <div id="book-rank" class="col-md-offset-3 myContainer" style="width: 1000px;height:400px;"></div>
+    <div id="one-rank" class="col-md-offset-3 myContainer" style="width: 1000px;height:400px;"></div>
+    <div id="two-rank" class="col-md-offset-3 myContainer" style="width: 1000px;height:400px;"></div>
+    <div id="three-rank" class="col-md-offset-3 myContainer" style="width: 1000px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var readerChart = echarts.init(document.getElementById('reader-rank'));
+        var bookChart = echarts.init(document.getElementById('book-rank'));
+        var oneChart = echarts.init(document.getElementById('one-rank'));
+        var twoChart = echarts.init(document.getElementById('two-rank'));
+        var threeChart = echarts.init(document.getElementById('three-rank'));
+
+
+        var readerOption= {
+            title: {
+                text: '理科分数线'
+            },
+            tooltip: {},
+            legend: {
+                data: ['学校分数线','2017-2011理科本科线','2017-2011理科一本线']
+            },
+            xAxis: {
+                data: [ {% for x in helloAmountData %} '{{ x }}', {% endfor %} ]
+
+            },
+            yAxis: {},
+            series: [{
+                name: '学校分数线',
+                type: 'line',
+                data: [ {% for x in readerAmountData %} '{{ x }}', {% endfor %} ]
+
+            },
+                {
+                    name:'2017-2011理科本科线',
+                    type:'line',
+                    data:[360,402,483,465,480,484,460]
+                },
+                {
+                   name:'2017-2011理科一本线',
+                    type:'line',
+                    data:[485,508,577,560,516,585,568]
+                }]
+        };
+
+        var bookOption = {
+            title: {
+                text: '文科分数线'
+            },
+            tooltip: {},
+            legend: {
+                data: ['学校分数线','2017-2011文科本科线','2017-2011文科一本线'],
+            },
+            xAxis: {
+                data: [ {% for x in nihaoAmountData %} '{{ x }}', {% endfor %} ]
+
+            },
+            yAxis: {},
+            series: [{
+                name: '学校分数线',
+                type: 'line',
+                data: [ {% for x in wenAmountData %} '{{ x }}', {% endfor %} ]
+
+            },
+            {
+                    name:'2017-2011文科本科线',
+                    type:'line',
+                    data:[418,417,474,483,498,502,489]
+                },
+                {
+                   name:'2017-2011文科一本线',
+                    type:'line',
+                    data:[520,514,573,579,594,589,580]
+                }]
+        };
+        readerChart.setOption(readerOption);
+        bookChart.setOption(bookOption);
+
+
+        var oneOption= {
+            title: {
+                text: '专业满意度top10'
+            },
+            tooltip: {},
+            legend: {
+                data: ['评分(5分为满分)']
+            },
+            xAxis: {
+                data: [ {% for x in type1AmountData %} '{{ x }}', {% endfor %} ]
+            },
+            yAxis: {
+
+            },
+            series: [{
+                name: '评分(5分为满分)',
+                type: 'bar',
+                data: [ {% for x in score1AmountData %} '{{ x }}', {% endfor %} ],
+                itemStyle:{
+                    normal:{
+                        color:'#4c8dae'
+                    }
+                }
+            }]
+        };
+        oneChart.setOption(oneOption);
+
+        var twoOption= {
+            title: {
+                text: '专业推荐指数top10'
+            },
+            tooltip: {},
+            legend: {
+                data: ['评分(5分为满分)']
+            },
+            xAxis: {
+                data: [ {% for x in type2AmountData %} '{{ x }}', {% endfor %} ]
+            },
+            yAxis: {
+
+            },
+            series: [{
+                name: '评分(5分为满分)',
+                type: 'bar',
+                data: [ {% for x in score2AmountData %} '{{ x }}', {% endfor %} ],
+                itemStyle:{
+                    normal:{
+                        color:'#cca4e3'
+                    }
+                }
+            }]
+        };
+        twoChart.setOption(twoOption);
+
+        var threeOption= {
+            title: {
+                text: '专业推荐人数top10'
+            },
+            tooltip: {},
+            legend: {
+                data: ['推荐人数']
+            },
+            xAxis: {
+                data: [ {% for x in type3AmountData %} '{{ x }}', {% endfor %} ]
+            },
+            yAxis: {
+
+            },
+            series: [{
+                name: '推荐人数',
+                type: 'bar',
+                data: [ {% for x in score3AmountData %} '{{ x }}', {% endfor %} ],
+                itemStyle:{
+                    normal:{
+                        color:'#eacd76'
+                    }
+                }
+            }]
+        };
+        threeChart.setOption(threeOption);
+    </script>
+
+
+
+
+
+
+
+
+{% endblock %}

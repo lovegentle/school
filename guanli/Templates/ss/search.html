@@ -1,0 +1,89 @@
+{% extends "ss/base.html" %}
+{% load staticfiles %}
+{% block title %}搜索{% endblock %}
+
+{% block content %}
+
+
+    <div class="container col-md-8 col-md-offset-2">
+
+        <div class="container">
+            <form action="/search" method="GET">
+                <div class="row col-md-7 col-md-offset-1">
+
+                    {% for radio in searchForm.search_by %}
+                        <div class="radio-inline">
+                            {{ radio }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="input-group">
+                        {{ searchForm.keyword }}
+                        <span class="input-group-btn">
+                        <button class="btn btn-default btn-lg btn-info" type="submit">校院检索</button>
+                    </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <h2 id='hint' class="label-success col-md-5 col-md-offset-2">以下是{{ search_by }}匹配'{{ keyword }}'的结果</h2>
+        <table class="table table-hover">
+            <thead>
+            <th>name</th>
+            <th>img</th>
+            <th>type</th>
+            <th>subjection</th>
+            <th>nature</th>
+            <th>url</th>
+            <th>local</th>
+            </thead>
+            <tbody>
+            {% for hello in books %}
+                <tr>
+                    <td><a href="/book/detail?name={{ hello.name }}">{{ hello.name }}</a></td>
+                    <td>
+                        <a href="/book/detail?name={{ hello.name }}">
+                            <img class="img-responsive"
+                                 src="{{ hello.img }}"
+                                 width="90"
+                                 height="128"
+                             >
+                        </a>
+                    </td>
+                    <td>{{ hello.type }}</td>
+                    <td>{{ hello.subjection }}
+                    <td>{{ hello.nature }}</td>
+                    <td>{{ hello.url }}</td>
+                    <td>{{ hello.local }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td>暂无校院</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <nav class="myContainer">
+            <ul class="pager">
+                {% if books.has_previous %}
+                    <li class="previous"><a
+                            href="{{ current_path }}&page={{ books.previous_page_number }}#hint">上一页</a>
+                    </li>
+                {% else %}
+                    <li class="previous disabled"><a href="#">上一页</a></li>
+                {% endif %}
+                第 {{ books.number }} / {{ books.paginator.num_pages }}页
+                {% if books.has_next %}
+                    <li class="next"><a
+                            href="{{ current_path }}&page={{ books.next_page_number }}#hint">下一页</a>
+                    </li>
+                {% else %}
+                    <li class="next disabled"><a href="#">下一页</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+{% endblock %}
